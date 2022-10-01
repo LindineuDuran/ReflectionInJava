@@ -44,7 +44,13 @@ public class ReflectionInJavaApplication implements CommandLineRunner
 		aluno.addNota(10);
 		aluno.addNota(5);
 
-		LocalDate dataMatricula = LocalDate.parse("24/01/2022", DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+		//LocalDate dataMatricula = LocalDate.parse("24/01/2022", DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+
+		/*
+		Creating a LocalDate with Values in Java
+		https://www.baeldung.com/java-creating-localdate-with-values
+		*/
+		LocalDate dataMatricula = LocalDate.of(2022, 01, 24);
 		aluno.setDataMatricula(dataMatricula);
 
 		aluno.imprimirDados();
@@ -67,10 +73,30 @@ public class ReflectionInJavaApplication implements CommandLineRunner
 		f.setAccessible(true);
 		f.set(meuObjeto, 9);
 
+		f = meuObjeto.getClass().getDeclaredField("numMatricula");
+		f.setAccessible(true);
+		f.set(meuObjeto, "123456");
+
+		f = meuObjeto.getClass().getDeclaredField("valor");
+		f.setAccessible(true);
+		f.set(meuObjeto, 500.55);
+
+		/*
+		Creating a LocalDate with Values in Java
+		https://www.baeldung.com/java-creating-localdate-with-values
+		*/
+		LocalDate dataMatricula = LocalDate.of(2022, 01, 24);
+
+		f = meuObjeto.getClass().getDeclaredField("dataMatricula");
+		f.setAccessible(true);
+		f.set(meuObjeto, dataMatricula);
+
 		Class[] parametros = new Class[1];
 		parametros[0] = double.class;
 		Method m = meuObjeto.getClass().getDeclaredMethod("addNota", parametros[0]);
 		m.invoke(meuObjeto, 99.9);
+		m.invoke(meuObjeto, 80.5);
+		m.invoke(meuObjeto, 70.0);
 
 		m = meuObjeto.getClass().getDeclaredMethod("imprimirDados");
 		m.invoke(meuObjeto);
