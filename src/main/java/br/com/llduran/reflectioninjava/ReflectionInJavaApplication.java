@@ -1,6 +1,8 @@
 package br.com.llduran.reflectioninjava;
 
 import br.com.llduran.reflectioninjava.model.Aluno;
+import br.com.llduran.reflectioninjava.model.Produto;
+import br.com.llduran.reflectioninjava.service.GeradorMapa;
 import br.com.llduran.reflectioninjava.service.Reflexao;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -11,6 +13,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 
 @SpringBootApplication
 public class ReflectionInJavaApplication implements CommandLineRunner
@@ -25,6 +28,9 @@ public class ReflectionInJavaApplication implements CommandLineRunner
 			throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, NoSuchMethodException,
 			InvocationTargetException, InstantiationException, NoSuchFieldException
 	{
+		System.out.println("=================================Testa Gerador de Mapa de Atributos=================================");
+		testaGeradorMapa();
+
 		System.out.println("=================================Testa Reflection=================================");
 		testaReflection();
 
@@ -100,5 +106,12 @@ public class ReflectionInJavaApplication implements CommandLineRunner
 
 		m = meuObjeto.getClass().getDeclaredMethod("imprimirDados");
 		m.invoke(meuObjeto);
+	}
+
+	private void testaGeradorMapa()
+	{
+		Produto p = new Produto("Design Patterns","LIVRO",59.90, "Publicado pela Casa do Codigo");
+		Map<String,Object> props = GeradorMapa.gerarMapa(p);
+		for(String prop : props.keySet()){System.out.println(prop+" = "+props.get(prop));}
 	}
 }
