@@ -1,8 +1,10 @@
 package br.com.llduran.reflectioninjava;
 
 import br.com.llduran.reflectioninjava.model.Aluno;
+import br.com.llduran.reflectioninjava.model.Person;
+import br.com.llduran.reflectioninjava.model.Product;
 import br.com.llduran.reflectioninjava.model.Produto;
-import br.com.llduran.reflectioninjava.service.GeradorMapa;
+import br.com.llduran.reflectioninjava.service.ReflectionMapper;
 import br.com.llduran.reflectioninjava.service.Reflexao;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -12,7 +14,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 @SpringBootApplication
@@ -28,8 +29,10 @@ public class ReflectionInJavaApplication implements CommandLineRunner
 			throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, NoSuchMethodException,
 			InvocationTargetException, InstantiationException, NoSuchFieldException
 	{
-		System.out.println("=================================Testa Gerador de Mapa de Atributos=================================");
-		testaGeradorMapa();
+		System.out.println("=================================Testa ReflectionMapper de Atributos=================================");
+		testaReflectionMapper();
+
+		System.out.println("");
 
 		System.out.println("=================================Testa Reflection=================================");
 		testaReflection();
@@ -108,10 +111,28 @@ public class ReflectionInJavaApplication implements CommandLineRunner
 		m.invoke(meuObjeto);
 	}
 
-	private void testaGeradorMapa()
+	private void testaReflectionMapper()
 	{
-		Produto p = new Produto("Design Patterns","LIVRO",59.90, "Publicado pela Casa do Codigo");
-		Map<String,Object> props = GeradorMapa.gerarMapa(p);
-		for(String prop : props.keySet()){System.out.println(prop+" = "+props.get(prop));}
+		Person person = new Person();
+		person.setId(1);
+		person.setName("Gabriel");
+		person.setLastName("Amorim");
+		person.setAge(25);
+
+		Map<String, Object> attributes = ReflectionMapper.getAttributesMap(person);
+
+		for(String key : attributes.keySet()) {System.out.println(key + ": " + attributes.get(key));}
+
+		System.out.println("");
+
+		Product product = new Product();
+		product.setId(1);
+		product.setDescription("Oxford Dictionary");
+		product.setPrice(11.90);
+		product.setQuantity(1);
+
+		attributes = ReflectionMapper.getAttributesMap(product);
+
+		for(String key : attributes.keySet()) {System.out.println(key + ": " + attributes.get(key));}
 	}
 }
